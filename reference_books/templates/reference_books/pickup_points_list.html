@@ -1,0 +1,10 @@
+<!-- reference_books/templates/reference_books/pickup_points_list.html -->
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Список пунктов выдачи</h1>
+  <ul>
+    {% for pickup_point in pickup_points %}
+      <li><a href="{% url 'pickup_point_detail' pickup_point.id %}">{{ pickup_point.name }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

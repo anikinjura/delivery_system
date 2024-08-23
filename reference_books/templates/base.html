@@ -1,0 +1,34 @@
+<!-- reference_books/templates/base.html -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Project{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Welcome to Delivery System</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'agents_list' %}">Agents</a></li>
+                <li><a href="{% url 'pickup_points_list' %}">Pickup Points</a></li>
+                <li><a href="{% url 'employees_list' %}">Employees</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        <!-- Content will be injected here -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Delivery System. All rights reserved.</p>
+    </footer>
+</body>
+</html>

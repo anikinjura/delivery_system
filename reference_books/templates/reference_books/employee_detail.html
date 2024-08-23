@@ -1,0 +1,7 @@
+<!-- reference_books/templates/reference_books/employee_detail.html -->
+{% extends 'base.html' %}
+{% block content %}
+  <h1>{{ employee.first_name }} {{ employee.last_name }}</h1>
+  <p>Email: {{ employee.email }}</p>
+  <p>Position: {{ employee.position }}</p>
+{% endblock %}

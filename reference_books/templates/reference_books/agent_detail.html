@@ -1,13 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ agent.name }}</title>
-</head>
-<body>
-    <h1>{{ agent.name }}</h1>
-    <p>Email: {{ agent.email }}</p>
-    <p>Phone Number: {{ agent.phone_number }}</p>
-    <p>Created At: {{ agent.created_at }}</p>
-    <p>Updated At: {{ agent.updated_at }}</p>
-</body>
-</html>
+<!-- reference_books/templates/reference_books/agent_detail.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Детали агента</h1>
+    <p><strong>Имя:</strong> {{ agent.name }}</p>
+    <p><strong>Email:</strong> {{ agent.email }}</p>
+    <p><strong>Телефон:</strong> {{ agent.phone_number }}</p>
+    <h2>Пункты выдачи</h2>
+    <ul>
+        {% for pickup_point in agent.pickup_points.all %}
+            <li>{{ pickup_point.name }} - {{ pickup_point.address }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'agents_list' %}">Назад к списку агентов</a>
+{% endblock %}

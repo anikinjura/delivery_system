@@ -1,0 +1,7 @@
+<!-- reference_books/templates/reference_books/pickup_point_detail.html -->
+{% extends 'base.html' %}
+{% block content %}
+  <h1>{{ pickup_point.name }}</h1>
+  <p>Адрес: {{ pickup_point.address }}</p>
+  <p>Агент: {{ pickup_point.agent }}</p>
+{% endblock %}
