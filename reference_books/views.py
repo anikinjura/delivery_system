@@ -1,22 +1,25 @@
 # reference_books/views.py
-
 from rest_framework import viewsets
 from django.shortcuts import render, get_object_or_404
 from .models import Agent, Employee, PickupPoint
 from .serializers import AgentSerializer, EmployeeSerializer, PickupPointSerializer
+from rest_framework.permissions import IsAuthenticated
 
 # API ViewSets
 class AgentViewSet(viewsets.ModelViewSet):
     queryset = Agent.objects.all()
     serializer_class = AgentSerializer
+    permission_classes = [IsAuthenticated]  # Только аутентифицированные пользователи
 
 class PickupPointViewSet(viewsets.ModelViewSet):
     queryset = PickupPoint.objects.all()
     serializer_class = PickupPointSerializer
+    permission_classes = [IsAuthenticated]  # Только аутентифицированные пользователи
 
 class EmployeeViewSet(viewsets.ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
+    permission_classes = [IsAuthenticated]  # Только аутентифицированные пользователи
 
 # Web Interface Views
 def agents_list(request):

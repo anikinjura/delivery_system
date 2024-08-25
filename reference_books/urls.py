@@ -1,5 +1,4 @@
 # reference_books/urls.py
-
 from rest_framework.routers import DefaultRouter
 from django.urls import path, include
 from .views import (AgentViewSet, EmployeeViewSet, PickupPointViewSet,
@@ -8,9 +7,9 @@ from .views import (AgentViewSet, EmployeeViewSet, PickupPointViewSet,
 
 # Создаем роутер для API ViewSets
 router = DefaultRouter()
-router.register(r'agents', AgentViewSet)
-router.register(r'employees', EmployeeViewSet)
-router.register(r'pickup-points', PickupPointViewSet)
+router.register(r'agents', AgentViewSet, basename='agent')
+router.register(r'employees', EmployeeViewSet, basename='employee')
+router.register(r'pickup-points', PickupPointViewSet, basename='pickuppoint')
 
 urlpatterns = [
     # API Routes

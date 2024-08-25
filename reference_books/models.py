@@ -7,10 +7,8 @@ class Agent(ReferenceBook):
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15, unique=True)
 
-
     def get_pickup_points(self):
         return self.pickup_points.all()
-    
     
     def __str__(self):
         return self.name
@@ -38,7 +36,6 @@ class Employee(ReferenceBook):
     default_pickup_point = models.ForeignKey(PickupPoint, on_delete=models.SET_NULL, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     
-    # Добавляем дополнительные permissions (в стандартную секцию AUTHENTICATION AND AUTHORIZATION)
     class Meta:
         permissions = [
             ('manage_employees', 'Can manage employees'),
@@ -46,5 +43,5 @@ class Employee(ReferenceBook):
         ]
 
     def __str__(self):
-        return f"{self.first_name} {self.middle_name} {self.last_name} - {self.position}"
-
+        # Здесь используем or '', чтобы избежать None в строковом представлении
+        return f"{self.first_name} {self.middle_name or ''} {self.last_name} - {self.position}"

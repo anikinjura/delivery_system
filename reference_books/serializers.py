@@ -8,15 +8,15 @@ class AgentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PickupPointSerializer(serializers.ModelSerializer):
-    agent = serializers.StringRelatedField()
+    agent = serializers.StringRelatedField()  # Для отображения агента в виде строки
 
     class Meta:
         model = PickupPoint
         fields = '__all__'
 
 class EmployeeSerializer(serializers.ModelSerializer):
-    agent = serializers.StringRelatedField()
-    default_pickup_point = serializers.StringRelatedField()
+    agent = serializers.StringRelatedField()  # Для отображения агента в виде строки
+    default_pickup_point = serializers.StringRelatedField()  # Для отображения пункта выдачи в виде строки
 
     class Meta:
         model = Employee
