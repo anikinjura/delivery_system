@@ -17,3 +17,21 @@ staticfiles/
 
 # Миграции, создаваемые Django
 **/migrations/
+
+# Кеши Python и временные файлы
+__pycache__/
+*.py[cod]
+
+# Конфигурации окружения
+*.env
+
+# Компилированные файлы C
+*.so
+
+# Поиск по коду IDE
+.idea/
+*.iml
+
+# Byte-compiled / optimized / DLL files
+*.py[cod]
+*$py.class
