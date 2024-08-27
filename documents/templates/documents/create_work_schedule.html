@@ -1,0 +1,8 @@
+<!-- documents/templates/documents/create_work_schedule.html -->
+
+<h2>Создать график работы</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Сохранить график</button>
+</form>
