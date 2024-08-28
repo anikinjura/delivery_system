@@ -5,6 +5,12 @@ from .models import WorkSchedule, WorkShift
 from .forms import WorkScheduleForm, WorkShiftForm
 
 def create_work_schedule(request):
+    """
+    Представление для создания графика работы.
+
+    Если запрос POST, сохраняет данные формы и перенаправляет на список графиков.
+    Иначе отображает пустую форму.
+    """
     if request.method == 'POST':
         form = WorkScheduleForm(request.POST)
         if form.is_valid():
@@ -15,6 +21,11 @@ def create_work_schedule(request):
     return render(request, 'documents/create_work_schedule.html', {'form': form})
 
 def create_work_shift(request, schedule_id):
+    """
+    Представление для создания смены.
+
+    Если запрос POST, проверяет данные формы на конфликт и сохраняет смену.
+    """
     schedule = get_object_or_404(WorkSchedule, id=schedule_id)
     if request.method == 'POST':
         form = WorkShiftForm(request.POST)
@@ -29,3 +40,13 @@ def create_work_shift(request, schedule_id):
     else:
         form = WorkShiftForm(initial={'schedule': schedule})
     return render(request, 'documents/create_work_shift.html', {'form': form, 'schedule': schedule})
+
+def approve_work_schedule(request, schedule_id):
+    """
+    Представление для утверждения графика работы.
+
+    Изменяет статус графика на 'approved' и утверждает все смены.
+    """
+    schedule = get_object_or_404(WorkSchedule, id=schedule_id)
+    schedule.approve_schedule()
+    return redirect('schedule_list')

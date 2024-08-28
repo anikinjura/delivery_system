@@ -81,3 +81,19 @@ class Employee(ReferenceBook):
 
     def __str__(self):
         return f"{self.first_name} {self.middle_name or ''} {self.last_name} - {self.position}"
+
+class AccountingPeriod(ReferenceBook):
+    """
+    Модель, представляющая учетный период.
+
+    Атрибуты:
+        agent (ForeignKey): Ссылка на агента, к которому относится учетный период.
+        start_date (DateField): Дата начала учетного периода.
+        end_date (DateField): Дата окончания учетного периода.
+    """
+    agent = models.ForeignKey('Agent', on_delete=models.CASCADE)
+    start_date = models.DateField()
+    end_date = models.DateField()
+
+    def __str__(self):
+        return f"Учетный период: {self.start_date} - {self.end_date} ({self.agent})"
