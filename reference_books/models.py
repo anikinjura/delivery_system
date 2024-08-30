@@ -55,7 +55,8 @@ class Employee(ReferenceBook):
         phone_number (CharField): Номер телефона сотрудника, необязательный.
         date_of_birth (DateField): Дата рождения сотрудника, необязательная.
         date_of_hire (DateField): Дата принятия на работу.
-        position (CharField): Должность сотрудника.
+        position (CharField): Должность сотрудника. (Пример: "Водитель", "Администратор", "Оператор")
+        role (CharField): Роль сотрудника в системе для определения уровня доступа и полномочий в системе
         agent (ForeignKey): Агент, к которому прикреплен сотрудник.
         default_pickup_point (ForeignKey): Пункт выдачи по умолчанию для сотрудника.
         is_active (BooleanField): Статус активности сотрудника.
@@ -69,6 +70,15 @@ class Employee(ReferenceBook):
     date_of_birth = models.DateField(blank=True, null=True)
     date_of_hire = models.DateField()
     position = models.CharField(max_length=100)
+    role = models.CharField(
+        max_length=50,
+        choices=[
+            ('employee', 'Employee'),  # Сотрудник
+            ('manager', 'Manager'),    # Менеджер
+            ('admin', 'Administrator') # Администратор
+        ],
+        default='employee'
+    )    
     agent = models.ForeignKey(Agent, on_delete=models.CASCADE)
     default_pickup_point = models.ForeignKey(PickupPoint, on_delete=models.SET_NULL, blank=True, null=True)
     is_active = models.BooleanField(default=True)
@@ -82,6 +92,23 @@ class Employee(ReferenceBook):
     def __str__(self):
         return f"{self.first_name} {self.middle_name or ''} {self.last_name} - {self.position}"
 
+    def get_full_name(self):
+        """
+        Возвращает полное имя сотрудника (Фамилия Имя Отчество).
+        
+        Returns:
+            str: Полное имя сотрудника.
+        """
+        return f"{self.last_name} {self.first_name} {self.middle_name or ''}".strip()
+
+    def deactivate(self):
+        """
+        Деактивирует учетную запись сотрудника.
+        """
+        self.is_active = False
+        self.save()
+
+
 class AccountingPeriod(ReferenceBook):
     """
     Модель, представляющая учетный период.
@@ -91,9 +118,20 @@ class AccountingPeriod(ReferenceBook):
         start_date (DateField): Дата начала учетного периода.
         end_date (DateField): Дата окончания учетного периода.
     """
-    agent = models.ForeignKey('Agent', on_delete=models.CASCADE)
+    agent = models.ForeignKey(Agent, on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()
 
     def __str__(self):
         return f"Учетный период: {self.start_date} - {self.end_date} ({self.agent})"
+
+    def is_active(self):
+        """
+        Проверяет, является ли учетный период активным (текущая дата находится между start_date и end_date).
+
+        Returns:
+            bool: True, если период активен, иначе False.
+        """
+        from django.utils import timezone
+        today = timezone.now().date()
+        return self.start_date <= today <= self.end_date

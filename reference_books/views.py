@@ -1,8 +1,7 @@
-# reference_books/views.py
 from rest_framework import viewsets
 from django.shortcuts import render, get_object_or_404
-from .models import Agent, Employee, PickupPoint
-from .serializers import AgentSerializer, EmployeeSerializer, PickupPointSerializer
+from .models import Agent, Employee, PickupPoint, AccountingPeriod
+from .serializers import AgentSerializer, EmployeeSerializer, PickupPointSerializer, AccountingPeriodSerializer
 from rest_framework.permissions import IsAuthenticated
 
 class AgentViewSet(viewsets.ModelViewSet):
@@ -27,6 +26,14 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     """
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
+    permission_classes = [IsAuthenticated]  # Только аутентифицированные пользователи
+
+class AccountingPeriodViewSet(viewsets.ModelViewSet):
+    """
+    API ViewSet для управления объектами модели AccountingPeriod.
+    """
+    queryset = AccountingPeriod.objects.all()
+    serializer_class = AccountingPeriodSerializer
     permission_classes = [IsAuthenticated]  # Только аутентифицированные пользователи
 
 def agents_list(request):
@@ -79,3 +86,20 @@ def pickup_point_detail(request, pk):
     """
     pickup_point = get_object_or_404(PickupPoint, pk=pk)
     return render(request, 'reference_books/pickup_point_detail.html', {'pickup_point': pickup_point})
+
+def accounting_periods_list(request):
+    """
+    Представление для отображения списка учетных периодов на веб-странице.
+    """
+    accounting_periods = AccountingPeriod.objects.all()
+    return render(request, 'reference_books/accounting_periods_list.html', {'accounting_periods': accounting_periods})
+
+def accounting_period_detail(request, pk):
+    """
+    Представление для отображения деталей конкретного учетного периода.
+
+    Args:
+        pk (int): Первичный ключ учетного периода.
+    """
+    accounting_period = get_object_or_404(AccountingPeriod, pk=pk)
+    return render(request, 'reference_books/accounting_period_detail.html', {'accounting_period': accounting_period})

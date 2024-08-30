@@ -1,7 +1,15 @@
-<!-- reference_books/templates/reference_books/pickup_point_detail.html -->
+<!-- templates/reference_books/pickup_point_detail.html -->
 {% extends 'base.html' %}
+
+{% block title %}Pickup Point Details{% endblock %}
+
+{% block meta_description %}Details of pickup point {{ pickup_point.name }}{% endblock %}
+{% block meta_keywords %}pickup point, details, {{ pickup_point.name }}{% endblock %}
+
 {% block content %}
-  <h1>{{ pickup_point.name }}</h1>
-  <p>Адрес: {{ pickup_point.address }}</p>
-  <p>Агент: {{ pickup_point.agent }}</p>
+    <h2>{{ pickup_point.name }}</h2>
+    <p>Address: {{ pickup_point.address }}</p>
+    <p>Working Hours: {{ pickup_point.working_hours }}</p>
+    
+    <a href="{% url 'reference_books:pickup_points_list' %}">Back to Pickup Points List</a>
 {% endblock %}

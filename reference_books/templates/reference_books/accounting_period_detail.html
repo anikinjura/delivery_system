@@ -1,0 +1,16 @@
+<!-- templates/reference_books/accounting_period_detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}Accounting Period Details{% endblock %}
+
+{% block meta_description %}Details of accounting period {{ accounting_period.name }}{% endblock %}
+{% block meta_keywords %}accounting period, details, {{ accounting_period.name }}{% endblock %}
+
+{% block content %}
+    <h2>{{ accounting_period.name }}</h2>
+    <p>Start Date: {{ accounting_period.start_date }}</p>
+    <p>End Date: {{ accounting_period.end_date }}</p>
+    <p>Description: {{ accounting_period.description }}</p>
+    
+    <a href="{% url 'reference_books:accounting_periods_list' %}">Back to Accounting Periods List</a>
+{% endblock %}

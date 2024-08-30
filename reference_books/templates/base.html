@@ -1,34 +1,47 @@
-<!-- reference_books/templates/base.html -->
+<!-- templates/base.html -->
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- meta данные и заголовки -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}My Project{% endblock %}</title>
+    <title>{% block title %}My Application{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}{% endblock %}">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
+    <!-- Форма для отображения сообщений -->
+    {% include 'partials/messages.html' %}
+
     <header>
-        <h1>Welcome to Delivery System</h1>
+        <!-- навигация -->
+        <h1>My Application</h1>
         <nav>
             <ul>
-                <li><a href="{% url 'agents_list' %}">Agents</a></li>
-                <li><a href="{% url 'pickup_points_list' %}">Pickup Points</a></li>
-                <li><a href="{% url 'employees_list' %}">Employees</a></li>
+                <li><a href="{% url 'reference_books_web:agents_list' %}">Agents</a></li>
+                <li><a href="{% url 'reference_books_web:employees_list' %}">Employees</a></li>
+                <li><a href="{% url 'reference_books_web:pickup_points_list' %}">Pickup Points</a></li>
+                <li><a href="{% url 'reference_books_web:accounting_periods_list' %}">Accounting Periods</a></li>    
             </ul>
         </nav>
     </header>
 
+    <aside>
+        <!-- Форма поиска -->
+        {% include 'partials/search_form.html' %}
+    </aside>
+
     <main>
         {% block content %}
-        <!-- Content will be injected here -->
         {% endblock %}
     </main>
 
     <footer>
-        <p>&copy; 2024 Delivery System. All rights reserved.</p>
+        <!-- Форма обратной связи -->
+        {% include 'partials/feedback_form.html' %}
+        <p>&copy; 2024 https://vk.ru/anikinjura</p>
     </footer>
 </body>
 </html>
