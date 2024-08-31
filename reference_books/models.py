@@ -1,25 +1,26 @@
 # reference_books/models.py
+
 from django.db import models
 from django.contrib.auth.models import User
 from core.models import ReferenceBook
 
 class Agent(ReferenceBook):
     """
-    Модель, представляющая агента.
-    
+    Справочник Agent представляет агента - влыдельца пунктов выдачи
+
     Атрибуты:
-        email (EmailField): Электронная почта агента, уникальная.
-        phone_number (CharField): Номер телефона агента, уникальный.
+        email (EmailField): Уникальный email агента.
+        phone_number (CharField): Уникальный номер телефона агента.
     """
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15, unique=True)
 
     def get_pickup_points(self):
         """
-        Возвращает все пункты выдачи, связанные с этим агентом.
+        Возвращает все пункты выдачи, связанные с агентом.
 
-        Returns:
-            QuerySet: Список объектов PickupPoint.
+        Возвращает:
+            QuerySet: Набор пунктов выдачи, связанных с агентом.
         """
         return self.pickup_points.all()
     
@@ -29,11 +30,11 @@ class Agent(ReferenceBook):
 
 class PickupPoint(ReferenceBook):
     """
-    Модель, представляющая пункт выдачи.
-    
+    Справочник PickupPoint представляет пункт выдачи, связанный с агентом.
+
     Атрибуты:
         address (CharField): Адрес пункта выдачи.
-        agent (ForeignKey): Агент, к которому прикреплен пункт выдачи.
+        agent (ForeignKey): Связь с моделью Agent.
     """
     address = models.CharField(max_length=255)
     agent = models.ForeignKey(Agent, related_name='pickup_points', on_delete=models.CASCADE)
@@ -44,21 +45,21 @@ class PickupPoint(ReferenceBook):
 
 class Employee(ReferenceBook):
     """
-    Модель, представляющая сотрудника.
-    
+    Справочник Employee представляет сотрудника, связанного с агентом, и содержит его личную информацию.
+
     Атрибуты:
         user (OneToOneField): Пользователь, связанный с сотрудником.
         first_name (CharField): Имя сотрудника.
-        middle_name (CharField): Отчество сотрудника, необязательное.
+        middle_name (CharField): Отчество сотрудника (необязательно).
         last_name (CharField): Фамилия сотрудника.
-        email (EmailField): Электронная почта сотрудника, уникальная.
-        phone_number (CharField): Номер телефона сотрудника, необязательный.
-        date_of_birth (DateField): Дата рождения сотрудника, необязательная.
-        date_of_hire (DateField): Дата принятия на работу.
-        position (CharField): Должность сотрудника. (Пример: "Водитель", "Администратор", "Оператор")
-        role (CharField): Роль сотрудника в системе для определения уровня доступа и полномочий в системе
-        agent (ForeignKey): Агент, к которому прикреплен сотрудник.
-        default_pickup_point (ForeignKey): Пункт выдачи по умолчанию для сотрудника.
+        email (EmailField): Уникальный email сотрудника.
+        phone_number (CharField): Номер телефона сотрудника (необязательно).
+        date_of_birth (DateField): Дата рождения сотрудника.
+        date_of_hire (DateField): Дата найма сотрудника.
+        position (CharField): Должность сотрудника.
+        role (CharField): Роль сотрудника (employee, manager, admin).
+        agent (ForeignKey): Агент, с которым связан сотрудник.
+        default_pickup_point (ForeignKey): Пункт выдачи по умолчанию (необязательно).
         is_active (BooleanField): Статус активности сотрудника.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='employee_profile', null=True, blank=True)
@@ -73,9 +74,9 @@ class Employee(ReferenceBook):
     role = models.CharField(
         max_length=50,
         choices=[
-            ('employee', 'Employee'),  # Сотрудник
-            ('manager', 'Manager'),    # Менеджер
-            ('admin', 'Administrator') # Администратор
+            ('employee', 'Employee'),
+            ('manager', 'Manager'),
+            ('admin', 'Administrator')
         ],
         default='employee'
     )    
@@ -94,16 +95,16 @@ class Employee(ReferenceBook):
 
     def get_full_name(self):
         """
-        Возвращает полное имя сотрудника (Фамилия Имя Отчество).
-        
-        Returns:
-            str: Полное имя сотрудника.
+        Возвращает полное имя сотрудника в формате "Фамилия Имя Отчество".
+
+        Возвращает:
+            str: Фамилия Имя Отчество.
         """
         return f"{self.last_name} {self.first_name} {self.middle_name or ''}".strip()
 
     def deactivate(self):
         """
-        Деактивирует учетную запись сотрудника.
+        Деактивирует сотрудника, устанавливая флаг is_active в False.
         """
         self.is_active = False
         self.save()
@@ -111,10 +112,15 @@ class Employee(ReferenceBook):
 
 class AccountingPeriod(ReferenceBook):
     """
-    Модель, представляющая учетный период.
-
+    Справочник AccountingPeriod представляет учетный период, связанный с агентом.
+    Предназначен для ведения учета расчета зарплаты сотрудникам в пределах используемого Агентом учетного периода
+    В пределах учетного периода ведется фиксация таких показателей как:
+    1. количество отработанных часов сотрудниками в разрезе дней
+    2. количество опозданий в разрезе дней
+    3. количество выдач посылок с пункта выдачи в разрезе дней
+    Эти показатели в дальнейшем используются для расчета зарплаты за отработанные часы а так-же стимулирующих выплат в пределах учетного периода
     Атрибуты:
-        agent (ForeignKey): Ссылка на агента, к которому относится учетный период.
+        agent (ForeignKey): Агент, связанный с учетным периодом.
         start_date (DateField): Дата начала учетного периода.
         end_date (DateField): Дата окончания учетного периода.
     """
@@ -127,10 +133,10 @@ class AccountingPeriod(ReferenceBook):
 
     def is_active(self):
         """
-        Проверяет, является ли учетный период активным (текущая дата находится между start_date и end_date).
+        Проверяет, активен ли учетный период на текущую дату.
 
-        Returns:
-            bool: True, если период активен, иначе False.
+        Возвращает:
+            bool: True, если учетный период активен, иначе False.
         """
         from django.utils import timezone
         today = timezone.now().date()

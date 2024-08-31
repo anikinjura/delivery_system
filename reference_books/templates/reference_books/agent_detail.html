@@ -1,17 +1,16 @@
-<!-- templates/reference_books/agent_detail.html -->
+<!-- reference_books/templates/reference_books/agent_detail.html -->
+
 {% extends 'base.html' %}
 
-{% block title %}Agent Details{% endblock %}
-
-{% block meta_description %}Details of agent {{ agent.name }}{% endblock %}
-{% block meta_keywords %}agent, details, {{ agent.name }}{% endblock %}
-
 {% block content %}
-    <h2>{{ agent.name }}</h2>
-    <p>Email: {{ agent.email }}</p>
-    <p>Phone: {{ agent.phone }}</p>
-    <p>Address: {{ agent.address }}</p>
-    <p>Company: {{ agent.company }}</p>
-    
-    <a href="{% url 'reference_books:agents_list' %}">Back to Agents List</a>
+  <h1>{{ agent.name }}</h1>
+  <p>Email: {{ agent.email }}</p>
+  <p>Телефон: {{ agent.phone_number }}</p>
+  <h2>Пункты самовывоза</h2>
+  <!-- Перебор и отображение связанных пунктов самовывоза -->
+  <ul>
+    {% for pickup_point in agent.get_pickup_points %}
+      <li>{{ pickup_point.name }} - {{ pickup_point.address }}</li>
+    {% endfor %}
+  </ul>
 {% endblock %}

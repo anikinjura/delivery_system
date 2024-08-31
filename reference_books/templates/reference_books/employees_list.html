@@ -1,18 +1,13 @@
-<!-- templates/reference_books/employees_list.html -->
+<!-- reference_books/templates/reference_books/employees_list.html -->
+
 {% extends 'base.html' %}
 
-{% block title %}Employee List{% endblock %}
-
-{% block meta_description %}List of all employees in the system{% endblock %}
-{% block meta_keywords %}employees, list, reference books{% endblock %}
-
 {% block content %}
-    <h2>Employees</h2>
-    {% include 'partials/search_form.html' %}
-
-    <ul>
-        {% for employee in employees %}
-            <li><a href="{% url 'reference_books:employee_detail' employee.id %}">{{ employee.get_full_name }}</a> - {{ employee.position }}</li>
-        {% endfor %}
-    </ul>
+  <h1>Список сотрудников</h1>
+  <!-- Перебор списка сотрудников и отображение ссылок на их детали -->
+  <ul>
+    {% for employee in employees %}
+      <li><a href="{% url 'reference_books_web:employee_detail' employee.pk %}">{{ employee.get_full_name }}</a></li>
+    {% endfor %}
+  </ul>
 {% endblock %}

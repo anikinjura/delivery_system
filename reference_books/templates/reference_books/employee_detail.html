@@ -1,16 +1,15 @@
-<!-- templates/reference_books/employee_detail.html -->
+<!-- reference_books/templates/reference_books/employee_detail.html -->
+
 {% extends 'base.html' %}
 
-{% block title %}Employee Details{% endblock %}
-
-{% block meta_description %}Details of employee {{ employee.get_full_name }}{% endblock %}
-{% block meta_keywords %}employee, details, {{ employee.get_full_name }}{% endblock %}
-
 {% block content %}
-    <h2>{{ employee.get_full_name }}</h2>
-    <p>Email: {{ employee.email }}</p>
-    <p>Position: {{ employee.position }}</p>
-    <p>Department: {{ employee.department }}</p>
-    
-    <a href="{% url 'reference_books:employees_list' %}">Back to Employees List</a>
+  <h1>{{ employee.get_full_name }}</h1>
+  <p>Email: {{ employee.email }}</p>
+  <p>Телефон: {{ employee.phone_number }}</p>
+  <p>Дата рождения: {{ employee.date_of_birth }}</p>
+  <p>Дата найма: {{ employee.date_of_hire }}</p>
+  <p>Должность: {{ employee.position }}</p>
+  <p>Роль: {{ employee.role }}</p>
+  <p>Агент: {{ employee.agent.name }}</p>
+  <p>Пункт самовывоза по умолчанию: {{ employee.default_pickup_point.name }}</p>
 {% endblock %}

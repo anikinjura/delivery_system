@@ -1,5 +1,5 @@
 <!-- templates/partials/feedback_form.html -->
-<form action="{% url 'send_feedback' %}" method="post">
+<form action="{% url 'reference_books_web:send_feedback' %}" method="post">
     {% csrf_token %}
     <textarea name="feedback" placeholder="Your feedback..." required></textarea>
     <button type="submit">Send</button>

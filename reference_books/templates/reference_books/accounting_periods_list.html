@@ -1,23 +1,15 @@
-<!-- templates/reference_books/accounting_periods_list.html -->
+<!-- reference_books/templates/reference_books/accounting_periods_list.html -->
+
 {% extends 'base.html' %}
 
-{% block title %}Accounting Periods List{% endblock %}
-
-{% block meta_description %}List of all accounting periods{% endblock %}
-{% block meta_keywords %}accounting periods, list, reference books{% endblock %}
-
 {% block content %}
-    <h2>Accounting Periods</h2>
-    {% include 'partials/search_form.html' %}
-
-    <ul>
-        {% for period in accounting_periods %}
-            <li>
-                <a href="{% url 'reference_books:accounting_period_detail' period.id %}">
-                    {{ period.name }}
-                </a>
-                ({{ period.start_date }} - {{ period.end_date }})
-            </li>
-        {% endfor %}
-    </ul>
+  <h1>Список учетных периодов</h1>
+  <!-- Перебор списка учетных периодов и отображение ссылок на их детали -->
+  <ul>
+    {% for accounting_period in accounting_periods %}
+      <li><a href="{% url 'reference_books_web:accounting_period_detail' accounting_period.pk %}">
+        Учетный период: {{ accounting_period.start_date }} - {{ accounting_period.end_date }}
+      </a></li>
+    {% endfor %}
+  </ul>
 {% endblock %}

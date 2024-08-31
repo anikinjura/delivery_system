@@ -1,18 +1,13 @@
-<!-- templates/reference_books/agents_list.html -->
+<!-- reference_books/templates/reference_books/agents_list.html -->
+
 {% extends 'base.html' %}
 
-{% block title %}Agent List{% endblock %}
-
-{% block meta_description %}List of all agents in the system{% endblock %}
-{% block meta_keywords %}agents, list, reference books{% endblock %}
-
 {% block content %}
-    <h2>Agents</h2>
-    {% include 'partials/search_form.html' %}
-
-    <ul>
-        {% for agent in agents %}
-            <li><a href="{% url 'reference_books:agent_detail' agent.id %}">{{ agent.name }}</a> - {{ agent.email }}</li>
-        {% endfor %}
-    </ul>
+  <h1>Список агентов</h1>
+  <!-- Перебор списка агентов и отображение ссылок на их детали -->
+  <ul>
+    {% for agent in agents %}
+      <li><a href="{% url 'reference_books_web:agent_detail' agent.pk %}">{{ agent.name }}</a></li>
+    {% endfor %}
+  </ul>
 {% endblock %}
