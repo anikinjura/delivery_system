@@ -6,6 +6,9 @@ from . import views
 app_name = 'reference_books_web'
 
 urlpatterns = [
+    # Главная страница справочников
+    path('', views.ReferenceBooksHomeView.as_view(), name='reference_books_home'),
+
     # Маршруты для агентов
     path('agents/', views.agents_list, name='agents_list'),
     path('agents/<int:pk>/', views.agent_detail, name='agent_detail'),

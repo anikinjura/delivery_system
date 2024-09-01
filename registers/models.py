@@ -1,22 +1,38 @@
 # registers/models.py
 
 from django.db import models
-from documents.models import WorkSchedule, WorkShift
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.conf import settings
+from core.models import Report
 
-class WorkScheduleRegister(models.Model):
+class ChangeLog(Report):
     """
-    Модель регистра, представляющая журнал изменений графиков работы.
-
+    Лог изменений для документов системы, наследует базовый класс Report.
+    
     Атрибуты:
-        work_schedule (ForeignKey): Ссылка на график работы.
-        change_date (DateTimeField): Дата и время изменения.
-        status (CharField): Статус графика после изменения.
-        comment (TextField): Комментарий к изменению.
+        document_type (ForeignKey): Тип документа, указывающий на модель, к которой относится запись.
+        document_id (PositiveIntegerField): ID документа.
+        document (GenericForeignKey): Ссылка на конкретный документ.
+        user (ForeignKey): Пользователь, который внёс изменения.
+        action (CharField): Действие, совершённое пользователем (создание, изменение, удаление).
+        timestamp (DateTimeField): Время выполнения действия.
     """
-    work_schedule = models.ForeignKey(WorkSchedule, on_delete=models.CASCADE)
-    change_date = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=20)
-    comment = models.TextField(blank=True, null=True)
+    document_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    document_id = models.PositiveIntegerField()
+    document = GenericForeignKey('document_type', 'document_id')
+    
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        related_name='action_logs'  # Уникальное имя для обратной связи
+    )
+    action = models.CharField(max_length=50)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Change Log"
+        verbose_name_plural = "Change Logs"
 
     def __str__(self):
-        return f"{self.work_schedule} - {self.status} on {self.change_date}"
+        return f"ChangeLog for {self.document_type} #{self.document_id} by {self.user} on {self.timestamp}"

@@ -1,52 +1,59 @@
 # documents/views.py
 
+from rest_framework import viewsets
+from django.views import View
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import WorkSchedule, WorkShift
-from .forms import WorkScheduleForm, WorkShiftForm
+from .models import AgentDocument
+from .forms import AgentDocumentForm
+from .serializers import AgentDocumentSerializer
+from django.views.generic import TemplateView
+from reference_books.models import Agent
 
-def create_work_schedule(request):
+class DocumentHomeView(TemplateView):
     """
-    Представление для создания графика работы.
+    Класс представления для отображения главной страницы навигации по документам.
+    Использует шаблон 'documents/base.html'.
+    """
+    template_name = 'documents/base.html'
 
-    Если запрос POST, сохраняет данные формы и перенаправляет на список графиков.
-    Иначе отображает пустую форму.
+class AgentDocumentViewSet(viewsets.ModelViewSet):
     """
-    if request.method == 'POST':
-        form = WorkScheduleForm(request.POST)
+    API для работы с документами AgentDocument.
+
+    Атрибуты:
+        queryset (QuerySet): Список документов.
+        serializer_class (Serializer): Сериализатор для модели AgentDocument.
+    """
+    queryset = AgentDocument.objects.all()
+    serializer_class = AgentDocumentSerializer
+
+    def perform_create(self, serializer):
+        """
+        Сохранение объекта с указанием текущего пользователя.
+        """
+        serializer.save(user=self.request.user)
+
+class AgentDocumentWebView(View):
+    """
+    Веб-интерфейс для работы с документами AgentDocument.
+    """
+    def get(self, request, *args, **kwargs):
+        if 'pk' in kwargs:
+            document = get_object_or_404(AgentDocument, pk=kwargs['pk'])
+            return render(request, 'documents/agent_documents/agent_document_detail.html', {'document': document})
+        else:
+            documents = AgentDocument.objects.all()
+            return render(request, 'documents/agent_documents/agent_document_list.html', {'documents': documents})
+
+    def post(self, request, *args, **kwargs):
+        if 'pk' in kwargs:
+            document = get_object_or_404(AgentDocument, pk=kwargs['pk'])
+            form = AgentDocumentForm(request.POST, instance=document)
+        else:
+            form = AgentDocumentForm(request.POST)
+        
         if form.is_valid():
             form.save()
-            return redirect('schedule_list')
-    else:
-        form = WorkScheduleForm()
-    return render(request, 'documents/create_work_schedule.html', {'form': form})
-
-def create_work_shift(request, schedule_id):
-    """
-    Представление для создания смены.
-
-    Если запрос POST, проверяет данные формы на конфликт и сохраняет смену.
-    """
-    schedule = get_object_or_404(WorkSchedule, id=schedule_id)
-    if request.method == 'POST':
-        form = WorkShiftForm(request.POST)
-        if form.is_valid():
-            shift = form.save(commit=False)
-            shift.schedule = schedule
-            if schedule.check_conflicts():
-                shift.save()
-                return redirect('schedule_detail', pk=schedule.id)
-            else:
-                form.add_error(None, 'Конфликт смен в расписании')
-    else:
-        form = WorkShiftForm(initial={'schedule': schedule})
-    return render(request, 'documents/create_work_shift.html', {'form': form, 'schedule': schedule})
-
-def approve_work_schedule(request, schedule_id):
-    """
-    Представление для утверждения графика работы.
-
-    Изменяет статус графика на 'approved' и утверждает все смены.
-    """
-    schedule = get_object_or_404(WorkSchedule, id=schedule_id)
-    schedule.approve_schedule()
-    return redirect('schedule_list')
+            return redirect('documents_web:agent_document_list')
+        
+        return render(request, 'documents/agent_documents/agent_document_form.html', {'form': form})

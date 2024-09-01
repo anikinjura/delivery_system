@@ -1,0 +1,11 @@
+<!-- documents/templates/documents/agent_documents/agent_document_form.html -->
+
+{% extends 'documents/base.html' %}
+
+{% block title %}Create/Update Agent Document{% endblock %}
+
+{% block content %}
+<h2>{% if document %}Edit{% else %}Create{% endif %} Agent Document</h2>
+{% include 'documents/partials/form.html' %}
+<a href="{% url 'documents_web:agent_document_list' %}">Back to List</a>
+{% endblock %}

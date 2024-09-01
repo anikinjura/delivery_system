@@ -6,6 +6,14 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Agent, PickupPoint, Employee, AccountingPeriod
 from .serializers import AgentSerializer, PickupPointSerializer, EmployeeSerializer, AccountingPeriodSerializer
 from django.views.decorators.http import require_POST
+from django.views.generic import TemplateView
+
+class ReferenceBooksHomeView(TemplateView):
+    """
+    Класс представления для отображения главной страницы навигации по справочникам.
+    Использует шаблон 'reference_books/base.html'.
+    """
+    template_name = 'reference_books/base.html'
 
 class AgentViewSet(viewsets.ModelViewSet):
     """

@@ -1,0 +1,41 @@
+<!-- documents/templates/documents/base.html -->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Document Management{% endblock %}</title>
+    <!-- Блок для динамической установки заголовка страницы -->
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Подключение CSS-стилей -->
+</head>
+<body>
+    <header>
+        <h1>{% block header %}Document Management System{% endblock %}</h1>
+        <!-- Блок для заголовка страницы -->
+    </header>
+    <nav>
+        <!-- Навигационное меню -->
+        <ul>
+            <li><a href="{% url 'documents_web:agent_document_list' %}">Agent Documents</a></li>
+            <!-- Ссылка на список документов агентов -->
+            <li><a href="#">Other Documents</a></li>
+            <!-- Заглушка для других типов документов -->
+            <li><a href="{% url 'reference_books_web:reference_books_home' %}">Reference Books</a></li>
+            <!-- Ссылка на раздел "Справочники" -->
+        </ul>
+    </nav>
+    <main>
+        {% block content %}
+        <!-- Основной блок контента страницы -->
+        {% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2024 https://vk.ru/anikinjura</p>
+        <!-- Футер страницы -->
+    </footer>
+</body>
+</html>

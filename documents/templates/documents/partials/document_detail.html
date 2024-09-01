@@ -1,0 +1,10 @@
+<!-- documents/templates/documents/partials/document_detail.html -->
+
+<div>
+    <h2>Document ID: {{ document.id }}</h2>
+    <p>Type: {{ document.get_document_type_display }}</p>
+    <p>Status: {{ document.get_status_display }}</p>
+    <p>Created At: {{ document.created_at }}</p>
+    <p>Updated At: {{ document.updated_at }}</p>
+    <p>Agent: {{ document.agent.name }}</p>
+</div>
