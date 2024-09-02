@@ -1,45 +1,8 @@
 <!-- reference_books/templates/reference_books/base.html -->
-{% load static %}
+{% extends 'core/base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Reference Books{% endblock %}</title>
-    <!-- Блок для динамической установки заголовка страницы -->
+{% block title %}Reference Books{% endblock %}
 
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <!-- Подключение CSS-стилей -->
-</head>
-<body>
-    <header>
-        <h1>{% block header %}Reference Books{% endblock %}</h1>
-        <!-- Блок для заголовка страницы -->
-    </header>
-    <nav>
-        <!-- Навигационное меню -->
-        <ul>
-            <li><a href="{% url 'reference_books_web:agents_list' %}">Agents</a></li>
-            <!-- Ссылка на список агентов -->
-            <li><a href="{% url 'reference_books_web:employees_list' %}">Employees</a></li>
-            <!-- Ссылка на список сотрудников -->
-            <li><a href="{% url 'reference_books_web:pickup_points_list' %}">Pickup Points</a></li>
-            <!-- Ссылка на список пунктов самовывоза -->
-            <li><a href="{% url 'reference_books_web:accounting_periods_list' %}">Accounting Periods</a></li>
-            <!-- Ссылка на список учетных периодов -->
-            <li><a href="{% url 'documents_web:document_home' %}">Documents</a></li>
-            <!-- Ссылка на раздел "Документы" -->
-        </ul>
-    </nav>
-    <main>
-        {% block content %}
-        <!-- Основной блок контента страницы -->
-        {% endblock %}
-    </main>
-    <footer>
-        <p>&copy; 2024 https://vk.ru/anikinjura</p>
-        <!-- Футер страницы -->
-    </footer>
-</body>
-</html>
+{% block content %}
+<!-- Контент, специфичный для всех страниц reference_books, например, дополнительная навигация -->
+{% endblock %}

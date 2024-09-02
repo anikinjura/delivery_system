@@ -1,0 +1,36 @@
+<!-- core/templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Project{% endblock %}</title>
+    <!-- Здесь могут быть подключены глобальные стили и скрипты -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+    <header>
+        <nav>
+            <!-- Глобальная навигация по всему проекту -->
+            <ul>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'reference_books_home' %}">Reference Books</a></li>
+                <li><a href="{% url 'documents_home' %}">Documents</a></li>
+                <li><a href="{% url 'reports_home' %}">Reports</a></li>
+                <!-- Добавьте другие ссылки на разделы вашего проекта -->
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        <!-- Контент, который будет переопределен в дочерних шаблонах -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <!-- Глобальный футер -->
+        <p>&copy; 2024 My Project</p>
+    </footer>
+</body>
+</html>
